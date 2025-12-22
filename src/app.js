@@ -16,7 +16,10 @@ app.use((req, res, next) => {
     }
     next();
 });
-app.use('/', router);
+app.use('/api', router);
+app.use("/",(req,res)=>{
+    res.status(401).send({data:"you dont have access"})
+})
 
 await connectDB().then(()=>{
     console.log("Database connection established")
