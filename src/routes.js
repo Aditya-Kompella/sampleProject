@@ -1,11 +1,11 @@
 import express from 'express';
 const router = express.Router();
-console.log("coming in route")
+import { loginController } from "./controllers/login/login.controller.js";
 
-router.get("/user",(req,res,next)=>{
-    res.send({firstName:"Akshay",lastName:"Saini"});
-    // next()
-});
+const authController = new loginController();
+
+router.post("/login", (req, res) => authController.signIn(req, res));
+router.post("/signup", (req, res) => authController.signUp(req, res));
 
 // Export the router
 router.get("/",(req,res)=>{

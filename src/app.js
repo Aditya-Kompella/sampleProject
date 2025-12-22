@@ -2,9 +2,21 @@
 import express from "express";
 import router from './routes.js';  // Import your routes
 import 'dotenv/config';
+import cors from "cors"
+import { validateRequestBody, validateFields } from "./middleware/validation.js";
 import {connectDB} from "./config/database.js";
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use((req, res, next) => {
+    if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
+        return validateRequestBody(req, res, next);
+    }
+    next();
+});
+app.use('/', router);
 
 await connectDB().then(()=>{
     console.log("Database connection established")
@@ -14,5 +26,3 @@ await connectDB().then(()=>{
     }).catch(()=>{
         console.log("error connecting database");
     });
-
-app.use('/', router);
