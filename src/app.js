@@ -4,7 +4,7 @@ import router from './routes.js';  // Import your routes
 import 'dotenv/config';
 import cors from "cors"
 import { validateRequestBody, validateFields } from "./middleware/validation.js";
-import {connectDB} from "./config/database.js";
+import { connectDB } from "./config/database.js";
 
 const app = express();
 app.use(express.json());
@@ -17,15 +17,15 @@ app.use((req, res, next) => {
     next();
 });
 app.use('/api', router);
-app.use("/",(req,res)=>{
-    res.status(401).send({data:"you dont have access"})
+app.use("/", (req, res) => {
+    res.status(401).send({ data: "you dont have access" })
 })
 
-await connectDB().then(()=>{
+await connectDB().then(() => {
     console.log("Database connection established")
-    app.listen(process.env.PORT,()=>{
+    app.listen(process.env.PORT, () => {
         console.log(`server is successfully running on port ${process.env.PORT}....`)
     });
-    }).catch(()=>{
-        console.log("error connecting database");
-    });
+}).catch(() => {
+    console.log("error connecting database");
+});

@@ -1,9 +1,9 @@
 import { userModel } from "../../models/user.js";
 import bcrypt from "bcrypt";
 
-export class loginController {
+export class userController {
     constructor() {
-        console.log("inside login controller");
+        // console.log("inside login controller");
     }
 
     signIn(req, res) {
@@ -34,20 +34,30 @@ export class loginController {
             });
         }
     }
-
+    async getUser(req, res) {
+        try {
+            const email = req.params.email;
+            let body = email ? { "email": email } : { limit: 1, skip: 0 }
+            console.log("body: ", body);
+            const usersList = await userModel.find(body);
+            return res.status(200).send(usersList);
+        } catch (err) {
+            return res.status(500).send({ "err": err.message })
+        }
+    }
     async signUp(req, res) {
         try {
-             console.log("Request body:", req.body);
+            console.log("Request body:", req.body);
             const { email, password, firstName, lastName } = req.body;
-            if (!email || !password || !firstName || !lastName ) {
+            if (!email || !password || !firstName || !lastName) {
                 return res.status(400).json({
                     success: false,
                     message: "All fields are required"
                 });
             }
             // Add your user creation logic here
-            const existingUser = await userModel.findOne({ 
-                email: email.toLowerCase() 
+            const existingUser = await userModel.findOne({
+                email: email.toLowerCase()
             });
             if (existingUser) {
                 return res.status(409).json({

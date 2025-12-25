@@ -1,11 +1,16 @@
 import express from 'express';
 const router = express.Router();
-import { loginController } from "./controllers/login/login.controller.js";
+// import { userController } from "./controllers/login/user.controller.js";
+import { userRoutes } from './controllers/Users/user.routes.js';
 
-const authController = new loginController();
+const userRoute = new userRoutes();
 
-router.post("/login", (req, res) => authController.signIn(req, res));
-router.post("/signup", (req, res) => authController.signUp(req, res));
+// const authController = new userController();
+router.use('/user', userRoute.getRouter());
+
+
+// router.post("/login", (req, res) => authController.signIn(req, res));
+// router.post("/signup", (req, res) => authController.signUp(req, res));
 
 // Export the router
 router.get("/",(req,res)=>{
